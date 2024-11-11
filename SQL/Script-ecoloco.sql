@@ -34,6 +34,7 @@ create table if not exists evento(
 	fecha timestamp,
 	ubicacion varchar(250) not null,
 	descripcion text,
+    imagen varchar(500),
 	id_usuario int not null,
 	constraint fk_evento_usuario foreign key (id_usuario) references usuario(id)
 );
@@ -94,11 +95,11 @@ INSERT INTO aptitud (id, nombre) VALUES
 (5, 'Electricidad');
 
 -- Inserción de datos en la tabla `evento`
-INSERT INTO evento (id, fecha, ubicacion, descripcion, id_usuario) VALUES
-(1, '2023-09-15', 'Madrid', 'Evento de reforestación', 1),
-(2, '2023-10-01', 'Barcelona', 'Taller de primeros auxilios', 2),
-(3, '2023-11-20', 'Valencia', 'Distribución de alimentos', 3),
-(4, '2023-12-10', 'Sevilla', 'Taller de jardinería urbana', 4);
+INSERT INTO evento (id, fecha, ubicacion, descripcion, imagen, id_usuario) VALUES
+(1, '2023-09-15', 'Madrid', 'Evento de reforestación', 'foto.png', 1),
+(2, '2023-10-01', 'Barcelona', 'Taller de primeros auxilios', 'foto.png', 2),
+(3, '2023-11-20', 'Valencia', 'Distribución de alimentos', 'foto.png', 3),
+(4, '2023-12-10', 'Sevilla', 'Taller de jardinería urbana', 'foto.pnj', 4);
 
 -- Inserción de datos en la tabla `aptitud_perfil`
 INSERT INTO aptitud_perfil (id, id_aptitud, id_perfil) VALUES
