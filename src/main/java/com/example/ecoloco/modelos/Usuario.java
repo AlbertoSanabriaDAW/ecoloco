@@ -37,7 +37,7 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Perfil perfil;
 
-    // Relación uno a muchos con Evento (usuario puede crear múltiples eventos)
+    // Relación uno a muchos con Evento (usuario puede crear múltiples eventos) Hay que modificiarlo para los roles
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<Evento> eventosCreados;
 
@@ -49,7 +49,6 @@ public class Usuario {
             inverseJoinColumns = @JoinColumn(name = "id_evento")
     )
     private Set<Evento> eventosParticipados;
-
 
 
 }

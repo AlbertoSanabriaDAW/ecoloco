@@ -1,8 +1,9 @@
 package com.example.ecoloco.modelos;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "evento", schema = "ecoloco", catalog = "postgres")
@@ -14,4 +15,26 @@ import lombok.*;
 @EqualsAndHashCode
 public class Evento {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+
+    @Column(name = "titulo")
+    private String titulo;
+
+    @Column(name = "fecha")
+    private LocalDate fecha;
+
+    @Column(name = "ubicacion")
+    private String ubicacion;
+
+    @Column(name = "descripcion")
+    private String descripcion;
+
+    @Column(name = "imagen")
+    private String imagen;
+
+    @ManyToOne
+    @JoinColumn(name = "id_usuario")
+    private Usuario usuario;
 }
