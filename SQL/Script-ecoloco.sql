@@ -125,5 +125,3 @@ INSERT INTO usuario_evento (id, id_usuario, id_evento) VALUES
 (4, 3, 3),
 (5, 4, 4);
 
-
-
