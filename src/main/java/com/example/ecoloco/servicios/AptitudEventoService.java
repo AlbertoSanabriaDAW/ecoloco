@@ -2,12 +2,14 @@ package com.example.ecoloco.servicios;
 
 import com.example.ecoloco.modelos.AptitudEvento;
 import com.example.ecoloco.repositorios.AptitudEventoRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class AptitudEventoService {
 
     @Autowired
@@ -30,7 +32,7 @@ public class AptitudEventoService {
             aptitudEventoRepository.deleteById(id);
             return "AptitudEvento eliminado";
         } catch (Exception e) {
-            return "No se ha podido eliminar  aptitudEvento";
+            return "No se ha podido eliminar aptitudEvento";
         }
     }
 

@@ -2,12 +2,14 @@ package com.example.ecoloco.servicios;
 
 import com.example.ecoloco.modelos.Aptitud;
 import com.example.ecoloco.repositorios.AptitudRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@AllArgsConstructor
 public class AptitudService {
 
     @Autowired
