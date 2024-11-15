@@ -3,6 +3,7 @@ package com.example.ecoloco.modelos;
 import com.example.ecoloco.enumerados.Rol;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
 
