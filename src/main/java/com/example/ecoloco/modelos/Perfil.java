@@ -1,8 +1,8 @@
 package com.example.ecoloco.modelos;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 
 import java.time.LocalDate;
 
@@ -36,7 +36,9 @@ public class Perfil {
     @Column(name = "fecha_nacimiento")
     private LocalDate fechaNacimiento;
 
-    @OneToOne(mappedBy = "perfil", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne
+    @JoinColumn(name = "id_usuario")
+    @JsonBackReference
     private Usuario usuario;
 
 

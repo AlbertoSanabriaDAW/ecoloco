@@ -1,9 +1,10 @@
 package com.example.ecoloco.modelos;
 
 import com.example.ecoloco.enumerados.Rol;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public class Usuario {
 
     // Relación uno a uno con Perfil
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
     private Perfil perfil;
 
     // Relación uno a muchos con Evento (usuario puede crear múltiples eventos) Hay que modificiarlo para los roles
