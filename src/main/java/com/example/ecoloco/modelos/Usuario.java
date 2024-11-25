@@ -6,16 +6,17 @@ import jakarta.persistence.*;
 import lombok.*;
 //import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.Collections;
 import java.util.Set;
 
 @Entity
 @Table(name = "usuario", schema = "ecoloco", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"perfil"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude = {"perfil"})
 public class Usuario {
 
     @Id
@@ -40,10 +41,6 @@ public class Usuario {
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Perfil perfil;
-
-    // Relación uno a muchos con Evento (usuario puede crear múltiples eventos) Hay que modificiarlo para los roles
-    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Evento> eventosCreados;
 
     // Relación muchos a muchos con Evento (usuario participa en múltiples eventos)
     @ManyToMany

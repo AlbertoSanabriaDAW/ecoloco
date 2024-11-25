@@ -1,6 +1,8 @@
 package com.example.ecoloco.controladores;
 
 import com.example.ecoloco.dtos.UsuarioDTO;
+import com.example.ecoloco.dtos.UsuarioRegistroDTO;
+import com.example.ecoloco.mappers.UsuarioMapper;
 import com.example.ecoloco.modelos.Usuario;
 import com.example.ecoloco.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +16,9 @@ public class UsuarioController {
 
     @Autowired
     private UsuarioService usuarioService;
+    @Autowired
+    private UsuarioMapper usuarioMapper;
+
 
     // Listar todos los usuarios
     @GetMapping("/lista")
@@ -22,16 +27,16 @@ public class UsuarioController {
     }
 
     // Consultar un usuario
-    @GetMapping("/{id}")
-    public Usuario obtenerUsuario(@PathVariable Integer id) {
-        return usuarioService.findUsuariosById(id);
+    @GetMapping()
+    public UsuarioDTO obtenerUsuario(@RequestParam Integer id) {
+        Usuario usuario = usuarioService.findUsuariosById(id);
+        return usuarioMapper.toDTO(usuario);
     }
 
     // Registrar un usuario
     @PostMapping("/registro")
-    public Usuario guardarUsuario(@RequestBody UsuarioDTO usuarioDTO) {
-        Usuario usuario = usuarioService.convertirAEntidad(usuarioDTO);
-        return usuarioService.registrarUsuarios(usuario);
+    public Usuario guardarUsuario(@RequestBody UsuarioRegistroDTO usuarioRegistroDTO) {
+        return usuarioService.registrarUsuarios(usuarioRegistroDTO);
     }
 
     // Autenticar un usuario
@@ -41,9 +46,10 @@ public class UsuarioController {
     }
 
     // Eliminar un usuario
-    @DeleteMapping("/eliminar/{id}")
-    public String eliminarUsuario(@PathVariable Integer id) {
-        return usuarioService.eliminarUsuarios(id);
+    @DeleteMapping("/eliminar")
+    public String deleteUsuarioById(@RequestParam Integer id) {
+
+        return usuarioService.eliminarUsuario(id);
     }
 
 }

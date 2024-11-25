@@ -1,5 +1,6 @@
 package com.example.ecoloco.modelos;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -35,7 +36,4 @@ public class Evento {
     @Column(name = "imagen")
     private String imagen;
 
-    @ManyToOne
-    @JoinColumn(name = "id_usuario")
-    private Usuario usuario;
 }

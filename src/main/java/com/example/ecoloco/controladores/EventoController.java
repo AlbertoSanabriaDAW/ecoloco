@@ -1,44 +1,46 @@
 package com.example.ecoloco.controladores;
 
+import com.example.ecoloco.dtos.EventoCrearDTO;
+import com.example.ecoloco.dtos.EventoDTO;
+import com.example.ecoloco.mappers.EventoMapper;
+import com.example.ecoloco.modelos.Evento;
 import com.example.ecoloco.servicios.EventoService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
-@RequestMapping
+@RequestMapping("/eventos")
 public class EventoController {
 
+    @Autowired
     private EventoService eventoService;
+    private final EventoMapper eventoMapper;
 
-    // Listar todos los eventos
-//    @GetMapping("/eventos")
-//    public List<Evento> obtenerEventos() {
-//        return eventoService.findAllEventos();
-//    }
+    public EventoController(EventoMapper eventoMapper) {
+        this.eventoMapper = eventoMapper;
+    }
 
-    // Consultar un evento
-//    @GetMapping("/eventos/{id}")
-//    public Evento obtenerEvento(Integer id) {
-//        return eventoService.findEventosById(id);
-//    }
+    @GetMapping("/lista")
+    public List<EventoDTO> obtenerEventos() {
+        return eventoService.listarEventosDTO();
+    }
 
-    // Crear un evento (admin)
-//    @PostMapping("/eventos")
-//    public Evento crearEvento(Evento evento) {
-//        return eventoService.guardarEventos(evento);
-//    }
+    @GetMapping()
+    public EventoDTO obtenerEvento(@RequestParam Integer id){
+        Evento evento = eventoService.findEventosById(id);
+        return eventoMapper.toDTO(evento);
+    }
 
-    // Editar un evento (admin)
-//    @PutMapping("/eventos/{id}")
-//    public String editarEvento(Integer id) {
-//        return "Evento editado";
-//    }
+    @PostMapping("/crear")
+    public Evento guardarEvento(@RequestBody EventoCrearDTO eventoCrearDTO){
+        return eventoService.guardarEventos(eventoCrearDTO);
+    }
 
-    // Eliminar un evento (admin)
-//    @DeleteMapping("/eventos/{id}")
-//    public String eliminarEvento(Integer id) {
-//        return eventoService.eliminarEventos(id);
-//    }
+    @DeleteMapping("/eliminar")
+    public String deleteEventoById(@RequestParam Integer id){
+        return eventoService.eliminarEventos(id);
+    }
 
 }

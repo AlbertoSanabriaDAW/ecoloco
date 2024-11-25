@@ -3,12 +3,10 @@ package com.example.ecoloco.dtos;
 import lombok.Data;
 
 @Data
-public class EventoDTO {
+public class EventoCrearDTO {
 
-    private Integer id;
     private String titulo;
     private String fecha;
     private String ubicacion;
     private String descripcion;
-
 }

@@ -1,15 +1,15 @@
 package com.example.ecoloco.servicios;
 
-import com.example.ecoloco.dtos.PerfilDTO;
 import com.example.ecoloco.dtos.UsuarioDTO;
+import com.example.ecoloco.dtos.UsuarioRegistroDTO;
 import com.example.ecoloco.enumerados.Rol;
+import com.example.ecoloco.mappers.UsuarioMapper;
 import com.example.ecoloco.modelos.Usuario;
 import com.example.ecoloco.repositorios.UsuarioRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,54 +20,16 @@ public class UsuarioService {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private EventoService eventoService;
+
+    @Autowired
+    private UsuarioMapper usuarioMapper;
+
     //Listar todos los usuarios con DTO
     public List<UsuarioDTO> listarUsuariosDTO() {
         List<Usuario> usuarios = usuarioRepository.findAll();
-        List<UsuarioDTO> usuarioDTOs = new ArrayList<>();
-        for (Usuario usuario : usuarios) {
-            usuarioDTOs.add(convertirADTO(usuario));
-        }
-        return usuarioDTOs;
-    }
-
-    // Métodos de conversión a DTO
-    public UsuarioDTO convertirADTO(Usuario usuario) {
-        if (usuario == null) {
-            return null;
-        }
-        UsuarioDTO dto = new UsuarioDTO();
-        dto.setId(usuario.getId());
-        dto.setUsername(usuario.getUsername());
-        dto.setEmail(usuario.getEmail());
-        dto.setRol(usuario.getRol().name());
-
-        if (usuario.getPerfil() != null) {
-            PerfilDTO perfilDTO = new PerfilDTO();
-            perfilDTO.setId(usuario.getPerfil().getId());
-            perfilDTO.setNombre(usuario.getPerfil().getNombre());
-            perfilDTO.setApellidos(usuario.getPerfil().getApellidos());
-            perfilDTO.setTelefono(usuario.getPerfil().getTelefono());
-            dto.setPerfil(perfilDTO);
-        }
-
-        return dto;
-    }
-
-    // Metodo de conversión a entidad
-    public Usuario convertirAEntidad(UsuarioDTO usuarioDTO) {
-        if (usuarioDTO == null) {
-            return null;
-        }
-        Usuario usuario = new Usuario();
-        usuario.setId(usuarioDTO.getId());
-        usuario.setUsername(usuarioDTO.getUsername());
-        usuario.setEmail(usuarioDTO.getEmail());
-        try {
-            usuario.setRol(Rol.valueOf(usuarioDTO.getRol()));
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Rol no válido: " + usuarioDTO.getRol());
-        }
-        return usuario;
+        return usuarioMapper.toDTO(usuarios);
     }
 
     // Buscar usuario por id
@@ -76,35 +38,49 @@ public class UsuarioService {
     }
 
     // Registrar un usuario
-    public Usuario registrarUsuarios(Usuario usuario) {
-        if (usuarioRepository.existsByUsername(usuario.getUsername())) {
+    public Usuario registrarUsuarios(UsuarioRegistroDTO usuarioRegistroDTO) {
+        //Verificar si el usuario ya existe
+        if (usuarioRepository.existsByUsername(usuarioRegistroDTO.getUsername())) {
             throw new RuntimeException("El nombre de usuario ya existe");
         }
-        if (usuarioRepository.existsByEmail(usuario.getEmail())) {
+        if (usuarioRepository.existsByEmail(usuarioRegistroDTO.getEmail())) {
             throw new RuntimeException("El correo ya está registrado");
         }
+
+        //Crear usuario
+        Usuario usuario = new Usuario();
+        usuario.setUsername(usuarioRegistroDTO.getUsername());
+        usuario.setPassword(usuarioRegistroDTO.getPassword()); //Encriptar
+        usuario.setEmail(usuarioRegistroDTO.getEmail());
+        usuario.setRol(Rol.VOLUNTARIO); //Rol por defecto
+
         //Guardar usuario
         return usuarioRepository.save(usuario);
     }
+
 
     // Autenticar el usuario (login)
     public Usuario autenticarUsuario(String username, String password) {
         Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
         if (usuario.isPresent() && usuario.get().getPassword().equals(password)) {
             return usuario.get();
-        }else {
+        } else {
             throw new RuntimeException("Usuario o contraseña incorrectos");
         }
     }
 
     // Eliminar un usuario
-    public String eliminarUsuarios(Integer id) {
-        try {
-            usuarioRepository.deleteById(id);
-            return "Usuario eliminado";
-        } catch (Exception e) {
-            return "No se ha podido eliminar usuario";
+    public String eliminarUsuario(Integer id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Usuario no encontrado");
         }
+        // Eliminar las relaciones del usuario con los eventos
+        eventoService.eliminarUsuarioDeTodosLosEventos(id);
+        // Eliminar el usuario
+        usuarioRepository.deleteById(id);
+        return "Usuario eliminado";
+
+
     }
 
 }

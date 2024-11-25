@@ -3,10 +3,10 @@ package com.example.ecoloco.dtos;
 import lombok.Data;
 
 @Data
-public class UsuarioDTO {
-    private Integer id;
+public class UsuarioRegistroDTO {
+
     private String username;
     private String email;
-    private String rol;
-//    private PerfilDTO perfil;
+    private String password;
+
 }
