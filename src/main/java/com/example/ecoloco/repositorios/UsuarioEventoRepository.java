@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+import java.util.Optional;
+
 @Repository
 public interface UsuarioEventoRepository extends JpaRepository<UsuarioEvento, Integer> {
 
@@ -23,4 +26,7 @@ public interface UsuarioEventoRepository extends JpaRepository<UsuarioEvento, In
     @Query("DELETE FROM UsuarioEvento ue WHERE ue.usuario.id = :idUsuario AND ue.evento.id = :idEvento")
     void eliminarUsuarioDeEvento(@Param("idUsuario") Integer idUsuario, @Param("idEvento") Integer idEvento);
 
+    Optional<UsuarioEvento> findByEventoIdAndUsuarioId(Integer idEvento, Integer idUsuario);
+
+    List<UsuarioEvento> findByUsuarioId(Integer idUsuario);
 }

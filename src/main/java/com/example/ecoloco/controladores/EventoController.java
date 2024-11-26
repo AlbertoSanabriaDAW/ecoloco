@@ -47,4 +47,18 @@ public class EventoController {
         return eventoService.eliminarEventos(id);
     }
 
+    // Darse de alta al evento
+    @PostMapping("/darseDeAlta")
+    public String darseDeAlta(@RequestParam Integer idEvento, @RequestParam Integer idUsuario){
+        eventoService.darseDeAlta(idEvento, idUsuario);
+        return "Te has inscrito correctamente";
+    }
+
+    // Darse de baja al evento
+    @PostMapping("/darseDeBaja")
+    public String darseDeBaja(@RequestParam Integer idEvento, @RequestParam Integer idUsuario){
+        eventoService.darseDeBaja(idEvento, idUsuario);
+        return "Te has dado de baja correctamente";
+    }
+
 }

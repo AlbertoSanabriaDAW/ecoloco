@@ -4,9 +4,7 @@ import com.example.ecoloco.dtos.EventoCrearDTO;
 import com.example.ecoloco.dtos.EventoDTO;
 import com.example.ecoloco.mappers.EventoMapper;
 import com.example.ecoloco.modelos.Evento;
-import com.example.ecoloco.modelos.UsuarioEvento;
 import com.example.ecoloco.repositorios.EventoRepository;
-import com.example.ecoloco.repositorios.UsuarioEventoRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,11 +20,10 @@ public class EventoService {
 
     @Autowired
     private EventoRepository eventoRepository;
-
-    @Autowired
-    private UsuarioEventoRepository usuarioEventoRepository;
     @Autowired
     private EventoMapper eventoMapper;
+    @Autowired
+    private UsuarioEventoService usuarioEventoService;
 
     //Metodo para listar eventos
     public List<EventoDTO> listarEventosDTO() {
@@ -69,27 +66,16 @@ public class EventoService {
         }
     }
 
-    //Metodo para eliminar usuario de evento (darse de baja)
-    public void darseDeBaja(Integer idEvento, Integer idUsuario) {
-        Optional<Evento> eventoOptional = eventoRepository.findById(idEvento);
-        if (eventoOptional.isPresent()){
-            Evento evento = eventoOptional.get();
-            List<UsuarioEvento> usuarioEventos = evento.getUsuariosParticipantes();
-            for (UsuarioEvento usuarioEvento : usuarioEventos) {
-                if (usuarioEvento.getUsuario().getId().equals(idUsuario)){
-                    usuarioEventoRepository.delete(usuarioEvento);
-                    return; //salir del metodo despues de eliminar la relacion
-                }
-            }
-            throw new RuntimeException("Usuario no encontrado en el evento");
-        } else {
-            throw new RuntimeException("Evento no encontrado");
-        }
+    //Metodo para agregar usuario a evento (darse de alta)
+    public void darseDeAlta(Integer idEvento, Integer idUsuario) {
+        usuarioEventoService.inscripcion(idEvento, idUsuario);
     }
 
-    public void eliminarUsuarioDeTodosLosEventos(Integer idUsuario) {
-        usuarioEventoRepository.eliminarPorUsuarioId(idUsuario);
+    //Metodo para eliminar usuario de evento (darse de baja)
+    public void darseDeBaja(Integer idEvento, Integer idUsuario) {
+        usuarioEventoService.anularInscripcion(idEvento, idUsuario);
     }
+
 
 
 }
