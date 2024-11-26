@@ -28,22 +28,22 @@ public class UsuarioService {
 
     //Listar todos los usuarios con DTO
     public List<UsuarioDTO> listarUsuariosDTO() {
-        List<Usuario> usuarios = usuarioRepository.findAll();
+        List<Usuario> usuarios = usuarioRepository.findAllByDeletedFalse();
         return usuarioMapper.toDTO(usuarios);
     }
 
     // Buscar usuario por id
     public Usuario findUsuariosById(Integer id) {
-        return usuarioRepository.findById(id).orElse(null);
+        return usuarioRepository.findByIdAndDeletedFalse(id).orElse(null);
     }
 
     // Registrar un usuario
     public Usuario registrarUsuarios(UsuarioRegistroDTO usuarioRegistroDTO) {
         //Verificar si el usuario ya existe
-        if (usuarioRepository.existsByUsername(usuarioRegistroDTO.getUsername())) {
+        if (usuarioRepository.existsByUsernameAndDeletedFalse(usuarioRegistroDTO.getUsername())) {
             throw new RuntimeException("El nombre de usuario ya existe");
         }
-        if (usuarioRepository.existsByEmail(usuarioRegistroDTO.getEmail())) {
+        if (usuarioRepository.existsByEmailAndDeletedFalse(usuarioRegistroDTO.getEmail())) {
             throw new RuntimeException("El correo ya está registrado");
         }
 
@@ -61,7 +61,7 @@ public class UsuarioService {
 
     // Autenticar el usuario (login)
     public Usuario autenticarUsuario(String username, String password) {
-        Optional<Usuario> usuario = usuarioRepository.findByUsername(username);
+        Optional<Usuario> usuario = usuarioRepository.findByUsernameAndDeletedFalse(username);
         if (usuario.isPresent() && usuario.get().getPassword().equals(password)) {
             return usuario.get();
         } else {
@@ -71,13 +71,19 @@ public class UsuarioService {
 
     // Eliminar un usuario
     public String eliminarUsuario(Integer id) {
+        // Verificar si el usuario existe
         if (!usuarioRepository.existsById(id)) {
             throw new RuntimeException("Usuario no encontrado");
         }
-        // Eliminar las relaciones del usuario con los eventos
+        // Eliminar (marcar como eliminado) las relaciones del usuario con los eventos
         eventoService.eliminarUsuarioDeTodosLosEventos(id);
-        // Eliminar el usuario
-        usuarioRepository.deleteById(id);
+
+        // Marcar el usuario como eliminado
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        usuario.setDeleted(true);
+        usuarioRepository.save(usuario);
+
         return "Usuario eliminado";
 
 

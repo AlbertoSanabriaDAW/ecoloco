@@ -22,22 +22,26 @@ public class EventoController {
         this.eventoMapper = eventoMapper;
     }
 
+    // Listar todos los eventos✅
     @GetMapping("/lista")
     public List<EventoDTO> obtenerEventos() {
         return eventoService.listarEventosDTO();
     }
 
+    // Consultar un evento✅
     @GetMapping()
     public EventoDTO obtenerEvento(@RequestParam Integer id){
         Evento evento = eventoService.findEventosById(id);
         return eventoMapper.toDTO(evento);
     }
 
+    // Crear un evento (ADMIN)✅
     @PostMapping("/crear")
     public Evento guardarEvento(@RequestBody EventoCrearDTO eventoCrearDTO){
         return eventoService.guardarEventos(eventoCrearDTO);
     }
 
+    // Eliminar un evento (ADMIN)✅
     @DeleteMapping("/eliminar")
     public String deleteEventoById(@RequestParam Integer id){
         return eventoService.eliminarEventos(id);

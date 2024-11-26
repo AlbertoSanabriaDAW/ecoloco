@@ -37,19 +37,18 @@ public class Usuario {
     @Enumerated(EnumType.ORDINAL)
     private Rol rol;
 
+    @Column(name = "deleted")
+    private boolean deleted = false;
+
     // Relación uno a uno con Perfil
     @OneToOne(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JsonManagedReference
     private Perfil perfil;
 
     // Relación muchos a muchos con Evento (usuario participa en múltiples eventos)
-    @ManyToMany
-    @JoinTable(
-            name = "usuario_evento",
-            joinColumns = @JoinColumn(name = "id_usuario"),
-            inverseJoinColumns = @JoinColumn(name = "id_evento")
-    )
-    private Set<Evento> eventosParticipados;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    private Set<UsuarioEvento> eventosParticipados;
 
 
 }

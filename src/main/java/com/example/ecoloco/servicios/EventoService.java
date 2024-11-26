@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -27,16 +28,19 @@ public class EventoService {
     @Autowired
     private EventoMapper eventoMapper;
 
+    //Metodo para listar eventos
     public List<EventoDTO> listarEventosDTO() {
-        List<Evento> eventos = eventoRepository.findAll();
+        List<Evento> eventos = eventoRepository.findAllByDeletedFalse();
         return eventoMapper.toDTO(eventos);
     }
 
+    //Metodo para buscar evento por id
     public Evento findEventosById(Integer id) {
 
-        return eventoRepository.findById(id).orElse(null);
+        return eventoRepository.findByIdAndDeletedFalse(id).orElse(null);
     }
 
+    //Metodo para guardar evento
     public Evento guardarEventos(EventoCrearDTO eventoCrearDTO) {
         Evento evento = new Evento();
         evento.setTitulo(eventoCrearDTO.getTitulo());
@@ -52,20 +56,35 @@ public class EventoService {
         return eventoRepository.save(evento);
     }
 
+    //Metodo para eliminar evento
     public String eliminarEventos(Integer id) {
-        try {
-            eventoRepository.deleteById(id);
+        Optional<Evento> eventoOptional = eventoRepository.findById(id);
+        if (eventoOptional.isPresent()) {
+            Evento evento = eventoOptional.get();
+            evento.setDeleted(true);
+            eventoRepository.save(evento);
             return "Evento eliminado";
-        } catch (Exception e) {
-            return "No se ha podido eliminar evento";
+        } else {
+            throw new RuntimeException("Evento no encontrado");
         }
     }
 
     //Metodo para eliminar usuario de evento (darse de baja)
-
-
-    public void eliminarUsuarioDeEvento(Integer idUsuario, Integer idEvento) {
-        usuarioEventoRepository.eliminarUsuarioDeEvento(idUsuario, idEvento);
+    public void darseDeBaja(Integer idEvento, Integer idUsuario) {
+        Optional<Evento> eventoOptional = eventoRepository.findById(idEvento);
+        if (eventoOptional.isPresent()){
+            Evento evento = eventoOptional.get();
+            List<UsuarioEvento> usuarioEventos = evento.getUsuariosParticipantes();
+            for (UsuarioEvento usuarioEvento : usuarioEventos) {
+                if (usuarioEvento.getUsuario().getId().equals(idUsuario)){
+                    usuarioEventoRepository.delete(usuarioEvento);
+                    return; //salir del metodo despues de eliminar la relacion
+                }
+            }
+            throw new RuntimeException("Usuario no encontrado en el evento");
+        } else {
+            throw new RuntimeException("Evento no encontrado");
+        }
     }
 
     public void eliminarUsuarioDeTodosLosEventos(Integer idUsuario) {

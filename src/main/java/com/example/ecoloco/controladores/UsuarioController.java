@@ -48,7 +48,6 @@ public class UsuarioController {
     // Eliminar un usuario
     @DeleteMapping("/eliminar")
     public String deleteUsuarioById(@RequestParam Integer id) {
-
         return usuarioService.eliminarUsuario(id);
     }
 
