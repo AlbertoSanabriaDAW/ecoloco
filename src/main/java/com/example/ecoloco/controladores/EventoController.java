@@ -16,11 +16,10 @@ public class EventoController {
 
     @Autowired
     private EventoService eventoService;
-    private final EventoMapper eventoMapper;
 
-    public EventoController(EventoMapper eventoMapper) {
-        this.eventoMapper = eventoMapper;
-    }
+    @Autowired
+    private EventoMapper eventoMapper;
+
 
     // Listar todos los eventos✅
     @GetMapping("/lista")
