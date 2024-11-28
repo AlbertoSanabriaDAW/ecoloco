@@ -31,3 +31,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# Ignorar el directorio src/main/resources/
+src/main/resources/
