@@ -1,5 +1,7 @@
 package com.example.ecoloco.servicios;
 
+import com.example.ecoloco.dtos.PerfilDTO;
+import com.example.ecoloco.dtos.PerfilEditarDTO;
 import com.example.ecoloco.modelos.Perfil;
 import com.example.ecoloco.repositorios.PerfilRepository;
 import lombok.AllArgsConstructor;
@@ -34,6 +36,19 @@ public class PerfilService {
         } catch (Exception e) {
             return "No se ha podido eliminar el perfil";
         }
+    }
+
+    public Perfil editarPerfil(PerfilEditarDTO perfil, Integer id) {
+        Perfil perfilActual = perfilRepository.findById(id).orElse(null);
+        if (perfilActual == null) {
+            return null;
+        }
+        perfilActual.setNombre(perfil.getNombre());
+        perfilActual.setApellidos(perfil.getApellidos());
+        perfilActual.setTelefono(perfil.getTelefono());
+        perfilActual.setDni(perfil.getDni());
+        perfilActual.setFechaNacimiento(perfil.getFechaNacimiento());
+        return perfilRepository.save(perfilActual);
     }
 
 }

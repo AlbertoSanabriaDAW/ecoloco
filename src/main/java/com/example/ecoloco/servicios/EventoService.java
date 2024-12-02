@@ -52,7 +52,7 @@ public class EventoService {
         LocalDate fechaFormateada = LocalDate.parse(eventoCrearDTO.getFecha(), formato);
         evento.setFecha(fechaFormateada);
         //Poner una imagen predeterminada y luego ya ver como se suben imagenes
-        evento.setImagen("https://www.eltiempo.com/files/image_640_428/uploads/2021/03/10/6048f3b1e3b3d.jpeg");
+        evento.setImagen(eventoCrearDTO.getImagen());
         evento.setDeleted(false);
 
         return eventoRepository.save(evento);
