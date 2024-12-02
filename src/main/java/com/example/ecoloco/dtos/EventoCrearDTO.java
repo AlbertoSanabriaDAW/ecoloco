@@ -9,4 +9,5 @@ public class EventoCrearDTO {
     private String fecha;
     private String ubicacion;
     private String descripcion;
+    private String imagen;
 }
