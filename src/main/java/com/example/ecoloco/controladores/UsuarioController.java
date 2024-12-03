@@ -1,6 +1,7 @@
 package com.example.ecoloco.controladores;
 
 import com.example.ecoloco.dtos.UsuarioDTO;
+import com.example.ecoloco.dtos.UsuarioLoginDTO;
 import com.example.ecoloco.dtos.UsuarioRegistroDTO;
 import com.example.ecoloco.mappers.UsuarioMapper;
 import com.example.ecoloco.modelos.Usuario;
@@ -41,8 +42,9 @@ public class UsuarioController {
 
     // Autenticar un usuario
     @PostMapping("/login")
-    public Usuario loginUsuario(Usuario usuario) {
-        return usuarioService.findUsuariosById(usuario.getId());
+    public UsuarioDTO loginUsuario(@RequestBody UsuarioLoginDTO usuarioLoginDTO) {
+        Usuario usuarioLogin = usuarioService.autenticarUsuario(usuarioLoginDTO.getUsername(), usuarioLoginDTO.getPassword());
+        return usuarioMapper.toDTO(usuarioLogin);
     }
 
     // Eliminar un usuario
