@@ -44,11 +44,16 @@ public class EventoService {
         evento.setUbicacion(eventoCrearDTO.getUbicacion());
         evento.setDescripcion(eventoCrearDTO.getDescripcion());
 
-        //FECHA NACIMIENTO (STRING) -> LOCALDATE
+        //FECHA DEL EVENTO (STRING) -> LOCALDATE
+        if (eventoCrearDTO.getFecha() == null || eventoCrearDTO.getFecha().isEmpty() || eventoCrearDTO.getFecha().isBlank() || eventoCrearDTO.getFecha().equals("")) {
+            eventoCrearDTO.setFecha(LocalDate.now().toString());
+        }
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate fechaFormateada = LocalDate.parse(eventoCrearDTO.getFecha(), formato);
         evento.setFecha(fechaFormateada);
         //Poner una imagen predeterminada y luego ya ver como se suben imagenes
+        evento.setImagen(eventoCrearDTO.getImagen());
+        evento.setDeleted(false);
 
         return eventoRepository.save(evento);
     }
