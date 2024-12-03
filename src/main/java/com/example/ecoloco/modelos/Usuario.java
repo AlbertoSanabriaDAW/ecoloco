@@ -16,7 +16,7 @@ import java.util.Set;
 @ToString (exclude = {"perfil"})
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"perfil"})
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Usuario {
 
     @Id

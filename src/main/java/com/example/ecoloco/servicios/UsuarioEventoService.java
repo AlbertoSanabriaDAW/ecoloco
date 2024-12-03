@@ -1,5 +1,6 @@
 package com.example.ecoloco.servicios;
 
+import com.example.ecoloco.dtos.ErroresDTO;
 import com.example.ecoloco.modelos.Evento;
 import com.example.ecoloco.modelos.Usuario;
 import com.example.ecoloco.modelos.UsuarioEvento;
@@ -26,7 +27,7 @@ public class UsuarioEventoService {
     @Autowired
     private EventoRepository eventoRepository;
 
-    public void agregarUsuarioAEvento(Integer idEvento, Integer idUsuario) {
+    public ErroresDTO agregarUsuarioAEvento(Integer idEvento, Integer idUsuario) {
         // Verificar si el evento existe
         Evento evento = eventoRepository.findByIdAndDeletedFalse(idEvento)
                 .orElseThrow(() -> new RuntimeException("Evento no encontrado"));
@@ -34,12 +35,24 @@ public class UsuarioEventoService {
         // Verificar si el usuario existe
         Usuario usuario = usuarioRepository.findByIdAndDeletedFalse(idUsuario)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
+        ErroresDTO erroresDTO = new ErroresDTO();
         // Crear la relación UsuarioEvento
         UsuarioEvento usuarioEvento = new UsuarioEvento();
         usuarioEvento.setEvento(evento);
         usuarioEvento.setUsuario(usuario);
+        if (usuarioEventoRepository.findByEventoIdAndUsuarioId(idEvento, idUsuario).isPresent()) {
+            erroresDTO.setMensaje("El usuario ya está inscrito en el evento");
+            return erroresDTO;
+        }
         usuarioEventoRepository.save(usuarioEvento);
+
+        usuario.getEventosParticipados().add(usuarioEvento);
+        usuarioRepository.save(usuario);
+        evento.getUsuariosParticipantes().add(usuarioEvento);
+        eventoRepository.save(evento);
+
+        erroresDTO.setMensaje("Usuario inscrito correctamente");
+        return erroresDTO;
     }
 
     public void eliminarUsuarioDeEvento(Integer idEvento, Integer idUsuario) {
@@ -57,8 +70,8 @@ public class UsuarioEventoService {
     }
 
     // Métodos para darse de alta y darse de baja
-    public void inscripcion(Integer idEvento, Integer idUsuario) {
-        agregarUsuarioAEvento(idEvento, idUsuario);
+    public ErroresDTO inscripcion(Integer idEvento, Integer idUsuario) {
+        return agregarUsuarioAEvento(idEvento, idUsuario);
     }
 
     public void anularInscripcion(Integer idEvento, Integer idUsuario) {

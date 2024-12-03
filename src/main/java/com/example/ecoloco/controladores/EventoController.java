@@ -1,5 +1,6 @@
 package com.example.ecoloco.controladores;
 
+import com.example.ecoloco.dtos.ErroresDTO;
 import com.example.ecoloco.dtos.EventoCrearDTO;
 import com.example.ecoloco.dtos.EventoDTO;
 import com.example.ecoloco.mappers.EventoMapper;
@@ -47,10 +48,9 @@ public class EventoController {
     }
 
     // Darse de alta al evento
-    @PostMapping("/darseDeAlta")
-    public String darseDeAlta(@RequestParam Integer idEvento, @RequestParam Integer idUsuario){
-        eventoService.darseDeAlta(idEvento, idUsuario);
-        return "Te has inscrito correctamente";
+    @PostMapping("/darseDeAlta/{idEvento}/{idUsuario}")
+    public ErroresDTO darseDeAlta(@PathVariable Integer idEvento, @PathVariable Integer idUsuario){
+        return eventoService.darseDeAlta(idEvento, idUsuario);
     }
 
     // Darse de baja al evento

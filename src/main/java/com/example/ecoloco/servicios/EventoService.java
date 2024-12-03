@@ -1,5 +1,6 @@
 package com.example.ecoloco.servicios;
 
+import com.example.ecoloco.dtos.ErroresDTO;
 import com.example.ecoloco.dtos.EventoCrearDTO;
 import com.example.ecoloco.dtos.EventoDTO;
 import com.example.ecoloco.mappers.EventoMapper;
@@ -72,8 +73,8 @@ public class EventoService {
     }
 
     //Metodo para agregar usuario a evento (darse de alta)
-    public void darseDeAlta(Integer idEvento, Integer idUsuario) {
-        usuarioEventoService.inscripcion(idEvento, idUsuario);
+    public ErroresDTO darseDeAlta(Integer idEvento, Integer idUsuario) {
+        return usuarioEventoService.inscripcion(idEvento, idUsuario);
     }
 
     //Metodo para eliminar usuario de evento (darse de baja)

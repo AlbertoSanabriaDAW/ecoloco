@@ -11,7 +11,7 @@ import java.util.List;
 @Table(name = "evento", schema = "ecoloco", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString(exclude = "usuariosParticipantes")
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
