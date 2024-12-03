@@ -60,4 +60,10 @@ public class EventoController {
         return "Te has dado de baja correctamente";
     }
 
+    // Listar eventos por usuario
+    @GetMapping("/usuario/{idUsuario}")
+    public List<EventoDTO> listarEventosPorUsuario(@PathVariable Integer idUsuario) {
+        return eventoService.listarEventosPorUsuario(idUsuario);
+    }
+
 }
