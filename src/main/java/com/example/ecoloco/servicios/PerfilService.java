@@ -1,6 +1,5 @@
 package com.example.ecoloco.servicios;
 
-import com.example.ecoloco.dtos.PerfilDTO;
 import com.example.ecoloco.dtos.PerfilEditarDTO;
 import com.example.ecoloco.modelos.Perfil;
 import com.example.ecoloco.repositorios.PerfilRepository;
@@ -21,7 +20,7 @@ public class PerfilService {
         return perfilRepository.findAll();
     }
 
-    public Perfil findPerfilesById(Integer id) {
+    public Perfil findPerfilById(Integer id) {
         return perfilRepository.findById(id).orElse(null);
     }
 

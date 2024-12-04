@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Table(name = "perfil", schema = "ecoloco", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"usuario"})
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode

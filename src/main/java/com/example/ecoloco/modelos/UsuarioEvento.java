@@ -8,7 +8,7 @@ import lombok.*;
 @Table(name = "usuario_evento", schema = "ecoloco", catalog = "postgres")
 @Getter
 @Setter
-@ToString
+@ToString (exclude = {"usuario", "evento"})
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
