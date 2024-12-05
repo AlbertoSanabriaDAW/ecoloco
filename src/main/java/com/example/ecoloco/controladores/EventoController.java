@@ -54,10 +54,10 @@ public class EventoController {
     }
 
     // Darse de baja al evento
-    @PostMapping("/darseDeBaja")
-    public String darseDeBaja(@RequestParam Integer idEvento, @RequestParam Integer idUsuario){
+    @PostMapping("/desapuntarse/{idEvento}/{idUsuario}")
+    public ErroresDTO darseDeBaja(@PathVariable Integer idEvento, @PathVariable Integer idUsuario){
         eventoService.darseDeBaja(idEvento, idUsuario);
-        return "Te has dado de baja correctamente";
+        return new ErroresDTO("Se ha dado de baja correctamente");
     }
 
     // Listar eventos por usuario
