@@ -5,8 +5,12 @@ import com.example.ecoloco.dtos.UsuarioLoginDTO;
 import com.example.ecoloco.dtos.UsuarioRegistroDTO;
 import com.example.ecoloco.mappers.UsuarioMapper;
 import com.example.ecoloco.modelos.Usuario;
+import com.example.ecoloco.security.AuthenticationRequest;
+import com.example.ecoloco.security.AuthenticationResponse;
+import com.example.ecoloco.security.RegisterRequest;
 import com.example.ecoloco.servicios.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,16 +40,18 @@ public class UsuarioController {
 
     // Registrar un usuario
     @PostMapping("/registro")
-    public Usuario guardarUsuario(@RequestBody UsuarioRegistroDTO usuarioRegistroDTO) {
-        return usuarioService.registrarUsuarios(usuarioRegistroDTO);
+    public ResponseEntity<AuthenticationResponse> guardarUsuario(@RequestBody RegisterRequest request) {
+        AuthenticationResponse response = usuarioService.registrarUsuario(request);
+        return ResponseEntity.ok(response);
     }
 
     // Autenticar un usuario
     @PostMapping("/login")
-    public UsuarioDTO loginUsuario(@RequestBody UsuarioLoginDTO usuarioLoginDTO) {
-        Usuario usuarioLogin = usuarioService.autenticarUsuario(usuarioLoginDTO.getUsername(), usuarioLoginDTO.getPassword());
-        return usuarioMapper.toDTO(usuarioLogin);
+    public ResponseEntity<AuthenticationResponse> loginUsuario(@RequestBody AuthenticationRequest request) {
+        AuthenticationResponse response = usuarioService.autenticarUsuario(request);
+        return ResponseEntity.ok(response);
     }
+
 
     // Eliminar un usuario
     @DeleteMapping("/eliminar")

@@ -32,7 +32,7 @@ public class AuthenticationService {
                 .build();
         repository.save(usuario);
         var token = jwtService.generarToken(usuario);
-        return AuthenticationResponse.builder().jwtToken(token).build();
+        return AuthenticationResponse.builder().token(token).build();
     }
 
 
@@ -47,6 +47,8 @@ public class AuthenticationService {
         var usuario = repository.findByUsernameAndDeletedFalse(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generarToken(usuario);
-        return AuthenticationResponse.builder().jwtToken(jwtToken).build();
+        return AuthenticationResponse.builder().token(jwtToken).build();
     }
+
+    //Este servicio no está en uso ya que se ha implementado un servicio de usuario
 }

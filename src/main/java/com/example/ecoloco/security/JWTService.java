@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +37,16 @@ public class JWTService {
     }
 
     public String generarToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        //Añadir el rol del usuario al token
+        String rol = userDetails.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority) // Convierte a String
+                .findFirst() // Obtén el primer rol
+                .orElse("USER"); // En caso de que no tenga rol, asignamos un rol por defecto
+
+        // Añadir el rol al token como un claim
+        extraClaims.put("rol", rol);
+
+
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())

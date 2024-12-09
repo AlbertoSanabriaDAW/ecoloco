@@ -20,11 +20,9 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private static final String[] WHITE_LIST_URL = {
-            "/auth/register",
-            "/auth/authenticate",
             "/usuarios/registro",
             "/usuarios/login",
-            "/eventos/lista"
+            "/eventos/lista",
 
     };
 
@@ -36,8 +34,9 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
-                        req.requestMatchers(WHITE_LIST_URL)
-                                .permitAll()
+                        req.requestMatchers(WHITE_LIST_URL).permitAll()
+                                .requestMatchers("/admin/**").hasRole("ADMIN")
+                                .requestMatchers("/voluntario/**").hasAnyRole("VOLUNTARIO", "ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -27,4 +27,6 @@ public class AuthenticationController {
     public ResponseEntity<AuthenticationResponse> authenticate(@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
+
+    //Este controlador no está en uso ya que se ha implementado un controlador de usuario
 }

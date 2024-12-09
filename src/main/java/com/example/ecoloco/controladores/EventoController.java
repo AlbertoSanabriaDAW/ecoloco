@@ -7,6 +7,7 @@ import com.example.ecoloco.mappers.EventoMapper;
 import com.example.ecoloco.modelos.Evento;
 import com.example.ecoloco.servicios.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -36,32 +37,37 @@ public class EventoController {
     }
 
     // Crear un evento (ADMIN)✅
-    @PostMapping("/crear")
+    @PostMapping("/admin/crear")
+    @PreAuthorize("hasRole('ADMIN')")
     public Evento guardarEvento(@RequestBody EventoCrearDTO eventoCrearDTO){
         return eventoService.guardarEventos(eventoCrearDTO);
     }
 
     // Eliminar un evento (ADMIN)✅
-    @DeleteMapping("/eliminar")
+    @DeleteMapping("/admin/eliminar")
+    @PreAuthorize("hasRole('ADMIN')")
     public String deleteEventoById(@RequestParam Integer id){
         return eventoService.eliminarEventos(id);
     }
 
     // Darse de alta al evento
-    @PostMapping("/darseDeAlta/{idEvento}/{idUsuario}")
+    @PostMapping("/voluntario/darseDeAlta/{idEvento}/{idUsuario}")
+    @PreAuthorize("hasRole('VOLUNTARIO')")
     public ErroresDTO darseDeAlta(@PathVariable Integer idEvento, @PathVariable Integer idUsuario){
         return eventoService.darseDeAlta(idEvento, idUsuario);
     }
 
     // Darse de baja al evento
-    @PostMapping("/desapuntarse/{idEvento}/{idUsuario}")
+    @PostMapping("/voluntario/desapuntarse/{idEvento}/{idUsuario}")
+    @PreAuthorize("hasRole('VOLUNTARIO')")
     public ErroresDTO darseDeBaja(@PathVariable Integer idEvento, @PathVariable Integer idUsuario){
         eventoService.darseDeBaja(idEvento, idUsuario);
         return new ErroresDTO("Se ha dado de baja correctamente");
     }
 
     // Listar eventos por usuario
-    @GetMapping("/usuario/{idUsuario}")
+    @GetMapping("/voluntario/{idUsuario}")
+    @PreAuthorize("hasRole('VOLUNTARIO')")
     public List<EventoDTO> listarEventosPorUsuario(@PathVariable Integer idUsuario) {
         return eventoService.listarEventosPorUsuario(idUsuario);
     }
