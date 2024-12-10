@@ -38,28 +38,28 @@ public class EventoController {
 
     // Crear un evento (ADMIN)✅
     @PostMapping("/admin/crear")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public Evento guardarEvento(@RequestBody EventoCrearDTO eventoCrearDTO){
         return eventoService.guardarEventos(eventoCrearDTO);
     }
 
     // Eliminar un evento (ADMIN)✅
     @DeleteMapping("/admin/eliminar")
-    @PreAuthorize("hasRole('ADMIN')")
+//    @PreAuthorize("hasRole('ADMIN')")
     public String deleteEventoById(@RequestParam Integer id){
         return eventoService.eliminarEventos(id);
     }
 
     // Darse de alta al evento
     @PostMapping("/voluntario/darseDeAlta/{idEvento}/{idUsuario}")
-    @PreAuthorize("hasRole('VOLUNTARIO')")
+//    @PreAuthorize("hasRole('VOLUNTARIO')")
     public ErroresDTO darseDeAlta(@PathVariable Integer idEvento, @PathVariable Integer idUsuario){
         return eventoService.darseDeAlta(idEvento, idUsuario);
     }
 
     // Darse de baja al evento
     @PostMapping("/voluntario/desapuntarse/{idEvento}/{idUsuario}")
-    @PreAuthorize("hasRole('VOLUNTARIO')")
+//    @PreAuthorize("hasRole('VOLUNTARIO')")
     public ErroresDTO darseDeBaja(@PathVariable Integer idEvento, @PathVariable Integer idUsuario){
         eventoService.darseDeBaja(idEvento, idUsuario);
         return new ErroresDTO("Se ha dado de baja correctamente");
@@ -67,7 +67,7 @@ public class EventoController {
 
     // Listar eventos por usuario
     @GetMapping("/voluntario/{idUsuario}")
-    @PreAuthorize("hasRole('VOLUNTARIO')")
+//    @PreAuthorize("hasRole('VOLUNTARIO')")
     public List<EventoDTO> listarEventosPorUsuario(@PathVariable Integer idUsuario) {
         return eventoService.listarEventosPorUsuario(idUsuario);
     }
