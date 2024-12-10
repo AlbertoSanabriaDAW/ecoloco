@@ -23,6 +23,14 @@ public class SecurityConfig {
             "/usuarios/registro",
             "/usuarios/login",
             "/eventos/lista",
+            "/eventos/admin/crear",
+            "/eventos/admin/eliminar",
+            "/eventos/voluntario/darseDeAlta/**",
+            "/eventos/voluntario/darseDeBaja/**",
+            "/eventos/**",
+            "/perfil/editar/**",
+            "/perfil/**",
+
 
     };
 
@@ -35,8 +43,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(req ->
                         req.requestMatchers(WHITE_LIST_URL).permitAll()
-                                .requestMatchers("/admin/**").hasRole("ADMIN")
-                                .requestMatchers("/voluntario/**").hasAnyRole("VOLUNTARIO", "ADMIN")
+//                                .requestMatchers("/admin/**").hasRole("ADMIN")
+//                                .requestMatchers("/voluntario/**").hasAnyRole("VOLUNTARIO", "ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
