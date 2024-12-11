@@ -1,5 +1,6 @@
 package com.example.ecoloco.security;
 
+import com.example.ecoloco.modelos.Usuario;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -37,6 +38,10 @@ public class JWTService {
     }
 
     public String generarToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        //Añadir el id del usuario al token
+        String userId = ((Usuario) userDetails).getId().toString();
+        extraClaims.put("userId", userId);
+
         //Añadir el rol del usuario al token
         String rol = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority) // Convierte a String
@@ -45,7 +50,6 @@ public class JWTService {
 
         // Añadir el rol al token como un claim
         extraClaims.put("rol", rol);
-
 
         return Jwts.builder()
                 .setClaims(extraClaims)

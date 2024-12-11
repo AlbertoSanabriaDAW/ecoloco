@@ -16,6 +16,7 @@
     import org.springframework.security.crypto.password.PasswordEncoder;
     import org.springframework.stereotype.Service;
 
+    import java.util.HashMap;
     import java.util.List;
 
     @Service
@@ -79,9 +80,12 @@
             Usuario usuario = usuarioRepository.findByUsernameAndDeletedFalse(request.getUsername())
                     .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-            String token = jwtService.generarToken(usuario);
+            // Generar token pasado el userId
+            String token = jwtService.generarToken(new HashMap<>(), usuario);
+
             return AuthenticationResponse.builder()
                     .token(token)
+                    .userId(usuario.getId())
                     .build();
         }
 

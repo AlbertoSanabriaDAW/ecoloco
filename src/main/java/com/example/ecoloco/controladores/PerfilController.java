@@ -13,7 +13,7 @@ public class PerfilController {
     @Autowired
     private PerfilService perfilService;
 
-    @PostMapping("editar/{id}")
+    @PostMapping("/editar/{id}")
     public Perfil editarPerfil(@PathVariable Integer id, @RequestBody PerfilEditarDTO perfil) {
         return perfilService.editarPerfil(perfil, id);
     }
