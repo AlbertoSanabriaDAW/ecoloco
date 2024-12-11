@@ -1,0 +1,6 @@
+package com.example.ecoloco.enumerados;
+
+public enum TipoAptitud {
+
+    JARDINERIA, CONDUCCION, PRIMEROS_AUXILIOS, COCINA, ELECTRICIDAD, FONTANERIA, CARPINTERIA, MECANICA, LIMPIEZA
+}
